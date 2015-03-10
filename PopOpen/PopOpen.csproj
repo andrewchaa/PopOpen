@@ -42,7 +42,10 @@
   <ItemGroup>
     <Compile Include="IFindProcess.cs" />
     <Compile Include="InUseDetection.cs" />
-    <Compile Include="ProcessDetective.cs" />
+    <Compile Include="IStartProcess.cs" />
+    <Compile Include="PopOpener.cs" />
+    <Compile Include="ProcessStarter.cs" />
+    <Compile Include="ProcessFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

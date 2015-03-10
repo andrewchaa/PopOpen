@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PopOpen
 {
-    public class ProcessDetective : IFindProcess
+    public class ProcessFinder : IFindProcess
     {
         public Process Find(string path)
         {

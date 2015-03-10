@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Machine.Specifications;
 
 namespace PopOpen.Tests
 {
     public class ProcessTests
     {
-        [Subject("File open")]
+        [Subject(typeof(ProcessFinder))]
         public class When_a_word_file_is_opened
         {
             private static string _filePath;
@@ -21,7 +17,7 @@ namespace PopOpen.Tests
 
             Establish context = () =>
             {
-                _processDetective = new ProcessDetective();
+                _processDetective = new ProcessFinder();
                 
                 _filePath = Path.Combine(Environment.CurrentDirectory, "Word.docx");
                 Process.Start(_filePath);
@@ -32,8 +28,6 @@ namespace PopOpen.Tests
 
             It should_have_the_id_of_the_process = () => _process.Id.ShouldBeGreaterThan(0);
             It should_have_the_name_of_the_process = () => _process.ProcessName.ShouldEqual("WINWORD");
-
-            Cleanup a = () => _process.Kill();
         }
     }
 }
