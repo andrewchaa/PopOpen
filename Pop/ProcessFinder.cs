@@ -13,9 +13,10 @@ namespace Pop
 
         public PopProcess Find(string path)
         {
-            var process = InUseDetection.GetProcessesUsingFiles(new List<string> {path}).First();
+            var processes = InUseDetection.GetProcessesUsingFiles(new List<string> {path});
+            var process = processes.First();
             
-            return new PopProcess(process.Id, process.ProcessName, process.MainWindowHandle);
+            return new PopProcess(process.Id, process.ProcessName, process.MainWindowHandle) { Handle = process.Handle };
         }
 
         public IntPtr FindForegroundWindow()
