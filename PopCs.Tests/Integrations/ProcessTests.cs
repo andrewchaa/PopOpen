@@ -6,7 +6,7 @@ using Machine.Specifications;
 using Pop.Cs;
 using Pop.Cs.Contracts;
 
-namespace Pop.Tests.Integrations
+namespace PopCs.Tests.Integrations
 {
     public class ProcessTests
     {

@@ -6,7 +6,7 @@ using Pop.Cs;
 using Pop.Cs.Contracts;
 using It = Machine.Specifications.It;
 
-namespace Pop.Tests.Units
+namespace PopCs.Tests.Units
 {
     public class PopOpenerTests
     {

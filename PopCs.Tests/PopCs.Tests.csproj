@@ -7,8 +7,8 @@
     <ProjectGuid>{EECC6B1C-10AD-4E63-BA2B-3B1F6F9C553C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pop.Tests</RootNamespace>
-    <AssemblyName>Pop.Tests</AssemblyName>
+    <RootNamespace>PopCs.Tests</RootNamespace>
+    <AssemblyName>PopCs.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
