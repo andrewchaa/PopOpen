@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Machine.Specifications;
-using PopOpen.Contracts;
+using Pop.Contracts;
 
-namespace PopOpen.Tests.Integrations
+namespace Pop.Tests.Integrations
 {
     public class PopOpenerTests
     {

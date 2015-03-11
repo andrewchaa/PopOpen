@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using PopOpen.Contracts;
+using Pop.Contracts;
 
-namespace PopOpen
+namespace Pop
 {
     public class Peekaboo : IPeekaboo
     {

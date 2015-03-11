@@ -1,10 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
-using PopOpen.Contracts;
+﻿using System.Threading;
+using Pop.Contracts;
 
-namespace PopOpen
+namespace Pop
 {
     public class PopOpener
     {

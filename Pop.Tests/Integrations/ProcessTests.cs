@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using Machine.Specifications;
-using PopOpen.Contracts;
+using Pop.Contracts;
 
-namespace PopOpen.Tests.Integrations
+namespace Pop.Tests.Integrations
 {
     public class ProcessTests
     {

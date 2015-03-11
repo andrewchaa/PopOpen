@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using Machine.Specifications;
 using Moq;
-using PopOpen.Contracts;
+using Pop.Contracts;
 using It = Machine.Specifications.It;
 
-namespace PopOpen.Tests.Units
+namespace Pop.Tests.Units
 {
     public class PopOpenerTests
     {

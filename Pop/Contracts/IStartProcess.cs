@@ -1,4 +1,4 @@
-﻿namespace PopOpen.Contracts
+﻿namespace Pop.Contracts
 {
     public interface IStartProcess
     {

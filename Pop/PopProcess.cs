@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 
-namespace PopOpen
+namespace Pop
 {
     public class PopProcess
     {
