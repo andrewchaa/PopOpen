@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using Machine.Specifications;
+using PopOpen.Contracts;
 
-namespace PopOpen.Tests
+namespace PopOpen.Tests.Integrations
 {
     public class ProcessTests
     {
@@ -12,7 +13,7 @@ namespace PopOpen.Tests
         public class When_a_word_file_is_opened
         {
             private static string _filePath;
-            private static Process _process;
+            private static PopProcess _process;
             private static IFindProcess _processDetective;
 
             Establish context = () =>

@@ -40,10 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IFindProcess.cs" />
+    <Compile Include="Contracts\IFindProcess.cs" />
     <Compile Include="InUseDetection.cs" />
-    <Compile Include="IStartProcess.cs" />
+    <Compile Include="Contracts\IPeekaboo.cs" />
+    <Compile Include="Contracts\IStartProcess.cs" />
+    <Compile Include="Peekaboo.cs" />
     <Compile Include="PopOpener.cs" />
+    <Compile Include="PopProcess.cs" />
     <Compile Include="ProcessStarter.cs" />
     <Compile Include="ProcessFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

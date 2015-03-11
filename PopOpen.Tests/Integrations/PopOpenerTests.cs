@@ -3,28 +3,32 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Machine.Specifications;
+using PopOpen.Contracts;
 
-namespace PopOpen.Tests
+namespace PopOpen.Tests.Integrations
 {
     public class PopOpenerTests
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         private static extern IntPtr GetForegroundWindow();
 
-        [Subject(typeof(PopOpener))]
-        public class When_finds_the_opening_process
+        public class Context
         {
-            private static string _filePath;
-            private static Process _process;
-            private static IFindProcess _finder;
-            private static PopOpener _popOpener;
-            private static IntPtr _activeWindowHandle;
-            private static Process _openingProcess;
+            protected static Process _process;
+            protected static PopOpener _popOpener;
+            protected static IntPtr _activeWindowHandle;
+            protected static PopProcess _openingProcess;
+            protected static string _filePath;
+            protected static IFindProcess _finder;
+        }
 
+        [Subject(typeof(PopOpener))]
+        public class When_it_opens_a_word_document : Context
+        {
             Establish context = () =>
             {
                 _filePath = Path.Combine(Environment.CurrentDirectory, "Word.docx");
-                _popOpener = new PopOpener(new ProcessStarter(), new ProcessFinder());
+                _popOpener = new PopOpener(new ProcessStarter(), new ProcessFinder(), new Peekaboo());
             };
 
             Because of = () =>
@@ -34,8 +38,9 @@ namespace PopOpen.Tests
                 Console.WriteLine("Active window handle: {0}", _activeWindowHandle);
             };
 
-            It should_have_foreground_window = () => _activeWindowHandle.ShouldNotEqual(IntPtr.Zero);
+            It should_find_the_currently_foreground_window_to_compare = () => _activeWindowHandle.ShouldNotEqual(IntPtr.Zero);
             It should_have_the_opening_process_in_the_foreground = () => _activeWindowHandle.ShouldEqual(_openingProcess.MainWindowHandle);
-        } 
+        }
     }
+
 }

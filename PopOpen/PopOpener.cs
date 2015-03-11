@@ -2,36 +2,38 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using PopOpen.Contracts;
 
 namespace PopOpen
 {
     public class PopOpener
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
-
-        const int WM_SYSCOMMAND = 274;
-        const int SC_MINIMIZE = 0xF020;
-        const int SC_RESTORE = 0xF120;
-
         private readonly IStartProcess _processStarter;
         private readonly IFindProcess _processFinder;
+        private readonly IPeekaboo _peekaboo;
 
-        public PopOpener(IStartProcess processStarter, IFindProcess processFinder)
+        public PopOpener(IStartProcess processStarter, IFindProcess processFinder, IPeekaboo peekaboo)
         {
             _processStarter = processStarter;
             _processFinder = processFinder;
+            _peekaboo = peekaboo;
         }
 
-        public Process Open(string filePath)
+        public PopProcess Open(string filePath)
         {
             _processStarter.Start(filePath);
             
             Thread.Sleep(7000);
             
             var process = _processFinder.Find(filePath);
-            SendMessage(process.MainWindowHandle, WM_SYSCOMMAND, SC_MINIMIZE, 0);
-            SendMessage(process.MainWindowHandle, WM_SYSCOMMAND, SC_RESTORE, 0);
+            var foregroundWindowHandle = _processFinder.FindForegroundWindow();
+
+            if (process.MainWindowHandle != foregroundWindowHandle)
+            {
+                _peekaboo.Minimise(process.MainWindowHandle);    
+            }
+            
+            _peekaboo.Restore(process.MainWindowHandle);
 
             return process;
         }
