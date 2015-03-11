@@ -3,7 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Machine.Specifications;
-using Pop.Contracts;
+using Pop.Cs;
+using Pop.Cs.Contracts;
 
 namespace Pop.Tests.Integrations
 {

@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Pop
+namespace Pop.Cs
 {
     public static class InUseDetection
     {

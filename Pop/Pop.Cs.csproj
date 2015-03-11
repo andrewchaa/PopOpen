@@ -7,8 +7,8 @@
     <ProjectGuid>{67F4EE66-476F-4EBF-969D-388327738918}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pop</RootNamespace>
-    <AssemblyName>Pop</AssemblyName>
+    <RootNamespace>Pop.Cs</RootNamespace>
+    <AssemblyName>Pop.Cs</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

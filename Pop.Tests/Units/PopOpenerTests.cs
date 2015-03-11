@@ -2,7 +2,8 @@
 using System.IO;
 using Machine.Specifications;
 using Moq;
-using Pop.Contracts;
+using Pop.Cs;
+using Pop.Cs.Contracts;
 using It = Machine.Specifications.It;
 
 namespace Pop.Tests.Units

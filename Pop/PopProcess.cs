@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pop
+namespace Pop.Cs
 {
     public class PopProcess
     {

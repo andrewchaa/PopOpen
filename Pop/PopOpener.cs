@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Pop.Contracts;
+using Pop.Cs.Contracts;
 
-namespace Pop
+namespace Pop.Cs
 {
     public class PopOpener
     {
@@ -59,7 +59,10 @@ namespace Pop
 //            {
             _peekaboo.Minimise(process.MainWindowHandle);
             _peekaboo.Restore(process.MainWindowHandle);
-            SetWindowPos(process.MainWindowHandle, HWND_TOPMOST, 0, 0, 100, 100, SWP_SHOWWINDOW);
+            SetWindowPos(process.MainWindowHandle, HWND_TOPMOST, 0, 0, 800, 600, SWP_SHOWWINDOW);
+            SetForegroundWindow(process.MainWindowHandle);
+            SetWindowPos(process.MainWindowHandle, HWND_NOTOPMOST, 0, 0, 800, 600, SWP_SHOWWINDOW);
+//            SetWindowPos(process.MainWindowHandle, HWND_TOP, 0, 0, 800, 600, SWP_SHOWWINDOW);
 
 //            }
             

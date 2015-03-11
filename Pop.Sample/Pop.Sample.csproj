@@ -51,9 +51,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pop\Pop.csproj">
+    <ProjectReference Include="..\Pop\Pop.Cs.csproj">
       <Project>{67f4ee66-476f-4ebf-969d-388327738918}</Project>
-      <Name>Pop</Name>
+      <Name>Pop.Cs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

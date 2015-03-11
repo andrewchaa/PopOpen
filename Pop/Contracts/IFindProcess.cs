@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pop.Contracts
+namespace Pop.Cs.Contracts
 {
     public interface IFindProcess
     {

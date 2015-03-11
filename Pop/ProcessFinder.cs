@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Pop.Contracts;
+using Pop.Cs.Contracts;
 
-namespace Pop
+namespace Pop.Cs
 {
     public class ProcessFinder : IFindProcess
     {

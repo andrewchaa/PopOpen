@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using Pop.Contracts;
+using Pop.Cs.Contracts;
 
-namespace Pop
+namespace Pop.Cs
 {
     public class ProcessStarter : IStartProcess
     {
