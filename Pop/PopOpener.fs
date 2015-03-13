@@ -5,7 +5,6 @@ open System.Diagnostics
 open System.Threading
 open System.Runtime.InteropServices
 
-
 module InteropNative = 
     [<DllImport("user32.dll", EntryPoint = "SetWindowPos")>]
     extern bool SetWindowPos(
@@ -16,6 +15,16 @@ module InteropNative =
             int cx,                     // width
             int cy,                     // height
             uint32 uFlags);             // window positioning flags
+
+    [<Struct>]
+    type RECT =
+        val Left: int
+        val Top: int
+        val Right: int
+        val Bottom: int
+
+    [<DllImport("user32.dll")>]
+    extern bool GetWindowRect(IntPtr hWnd, RECT& lpRect)
 
 module PopOpen =
     let Open (filePath: string) = 
@@ -34,11 +43,18 @@ module PopOpen =
         let HWND_NOTOPMOST = new IntPtr -2;
         let SWP_SHOWWINDOW = 0x0040u
         
-        let topWindow = InteropNative.SetWindowPos (openingProcess.MainWindowHandle, HWND_TOPMOST, 0, 0, 800, 600, SWP_SHOWWINDOW)
-        let noTopWIndow = InteropNative.SetWindowPos (openingProcess.MainWindowHandle, HWND_NOTOPMOST, 0, 0, 800, 600, SWP_SHOWWINDOW)
+        let mutable rect = new InteropNative.RECT()
+        
+        let getWindowRect = InteropNative.GetWindowRect(openingProcess.MainWindowHandle, &rect)
+        printfn "rect: %d %d %d %d" rect.Top rect.Left rect.Right rect.Bottom
 
+        let x, y, cx, cy = rect.Left, rect.Top, (rect.Right - rect.Left), (rect.Bottom - rect.Top)
+        let topWindow = InteropNative.SetWindowPos (openingProcess.MainWindowHandle, HWND_TOPMOST, x, y, cx, cy, SWP_SHOWWINDOW)
+        let noTopWIndow = InteropNative.SetWindowPos (openingProcess.MainWindowHandle, HWND_NOTOPMOST, x, y, cx, cy, SWP_SHOWWINDOW)
+
+        printfn "process: %d" openingProcess.Id
         openingProcess.Id
-        // printfn "process: %d" openingProcess.Id
+        
             
             
 
