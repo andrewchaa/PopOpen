@@ -45,6 +45,13 @@
     <Compile Include="PopOpener.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pop.Cs\Pop.Cs.csproj">
+      <Name>Pop.Cs</Name>
+      <Project>{67f4ee66-476f-4ebf-969d-388327738918}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>

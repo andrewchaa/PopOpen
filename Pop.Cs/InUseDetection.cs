@@ -5,14 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Pop.Cs
 {
     public static class InUseDetection
     {
-        public static IList<Process> GetProcessesUsingFiles(IList<string> filePaths)
+//        public static IList<Process> GetProcessesUsingFiles(IList<string> filePaths)
+        public static IList<Process> GetProcessesUsingFiles(IEnumerable<string> filePaths)
         {
+            var filePathsList = filePaths.ToList();
+
             uint sessionHandle;
             List<Process> processes = new List<Process>();
 
@@ -22,8 +26,8 @@ namespace Pop.Cs
             try
             {
                 // Let the restart manager know what files we're interested in
-                string[] pathStrings = new string[filePaths.Count];
-                filePaths.CopyTo(pathStrings, 0);
+                string[] pathStrings = new string[filePathsList.Count];
+                filePathsList.CopyTo(pathStrings, 0);
                 rv = RmRegisterResources(sessionHandle,
                     (uint)pathStrings.Length, pathStrings,
                     0, null, 0, null);

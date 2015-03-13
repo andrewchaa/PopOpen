@@ -54,6 +54,16 @@
     <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />
+    <None Include="Word.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pop\Pop.fsproj">
+      <Name>Pop</Name>
+      <Project>{f18bda6d-f6b8-4a2e-be8b-42b566e267c0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
