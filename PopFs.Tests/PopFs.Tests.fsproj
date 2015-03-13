@@ -51,10 +51,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PopOpenTests.fs" />
-    <None Include="Script.fsx" />
     <None Include="packages.config" />
     <None Include="app.config" />
     <None Include="Word.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Excel 1.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Excel 2.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

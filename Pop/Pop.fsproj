@@ -42,6 +42,9 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InteropNative.fs" />
+    <Compile Include="ProcessFinder.fs" />
+    <Compile Include="Peekaboo.fs" />
     <Compile Include="PopOpener.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
