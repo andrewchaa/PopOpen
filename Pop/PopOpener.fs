@@ -12,12 +12,17 @@ module PopOpen =
         let SWP_SHOWWINDOW = 0x0040u
 
         let openingProcess = Process.Start filePath
-        let noHandle = filePath |> ProcessFinder.Find 
-        printf "handle, immediately: %d\n" noHandle
 
-        Thread.Sleep(7000)
-        
-        let handle =
+        let mutable handle = nativeint 0
+        let mutable counter = 0
+
+        while handle = nativeint 0 && counter < 10  do
+            handle <- ProcessFinder.Find filePath
+            Thread.Sleep(1000)
+            printf "counter: %d\n" counter
+            counter <- counter + 1
+
+        handle <-
             filePath
             |> ProcessFinder.Find
             |> Peekaboo.GetWindowPositions
