@@ -13,6 +13,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Pop", "Pop\Pop.fsproj", "{F
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PopFs.Tests", "PopFs.Tests\PopFs.Tests.fsproj", "{EE72305A-5BF9-4408-8D32-BF69C13343DA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DE55BAB4-A07E-4800-8AFC-B9F4DA6A59B2}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,8 @@
+SRCSRV: ini ------------------------------------------------
+VERSION=2
+SRCSRV: variables ------------------------------------------
+SRCSRVVERCTRL=https
+SRCSRVTRG=https://raw.github.com/fsharp/FAKE/5f370b3e7b9e7adf2762ffe5f3505dd8c7f08d7f/%var2%
+SRCSRV: source files ---------------------------------------
+C:\code\fake\src\app\Fake.SQL\SQLServer.fs*src/app/Fake.SQL/SQLServer.fs
+SRCSRV: end ------------------------------------------------
