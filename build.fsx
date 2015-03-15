@@ -2,6 +2,7 @@
 open Fake
 
 let buildDir = "./build/"
+let packageDir = "./packaging/"
 
 Target "Clean" (fun _ ->
     trace "Cleaning up the build directory" 
@@ -18,6 +19,10 @@ Target "BuildApp" (fun _ ->
 Target "Default" (fun _ -> 
     trace "The build is complete"
 )
+
+//Target "CreatePackage" (fun _ ->
+    //CopyFiles packageDir allPackageFiles
+//)
 
 "Clean"
 ==> "BuildApp"
