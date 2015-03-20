@@ -18,6 +18,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DE55BA
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FD3A6DEF-105D-40F9-A497-237351C1D0CB}"
+	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
+		build.fsx = build.fsx
+		NuGet.exe = NuGet.exe
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

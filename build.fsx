@@ -21,6 +21,7 @@ Target "Default" (fun _ ->
 )
 
 //Target "CreatePackage" (fun _ ->
+    //let allPackageFiles = 
     //CopyFiles packageDir allPackageFiles
 //)
 
