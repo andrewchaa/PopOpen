@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>PopOpen</id>
+    <version>$version$</version>
+    <title>Pop Open</title>
+    <authors>Andrew Chaa</authors>
+    <owners>Huddle</owners>
+    <projectUrl>https://github.com/andrewchaa/PopOpen</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Open a document in the foreground by elevated the opening process to the top window</description>
+    <copyright>Copyleft 2015</copyright>
+    <tags>Windows, Open, Win api</tags>
+    <dependencies>
+      <dependency id="FSharp.Core" version="3.1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Pop.Cs.dll" target="lib"/>
+    <file src="Pop.dll" target="lib"/>
+  
+  </files>
+
+</package>

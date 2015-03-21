@@ -2,31 +2,53 @@
 open Fake
 
 let buildDir = "./build/"
-let packageDir = "./packaging/"
+let nugetDir = "./nuget"
+let deployDir = "./Publish"
+let packagesDir = "./packages/"
 
 Target "Clean" (fun _ ->
     trace "Cleaning up the build directory" 
-    CleanDir buildDir
+    CleanDirs [buildDir; deployDir;]
 )
 
 Target "BuildApp" (fun _ ->
     trace "Building ..."
     !! "./Pop/*.fsproj"
         |> MSBuildRelease buildDir "Build"
-        |> Log "AppBuild-Output"
+        |> Log "Build-Output"
 )
 
 Target "Default" (fun _ -> 
     trace "The build is complete"
 )
 
-//Target "CreatePackage" (fun _ ->
-    //let allPackageFiles = 
-    //CopyFiles packageDir allPackageFiles
-//)
+Target "CreatePackage" (fun _ ->
+    let allPackageFiles = [
+        "./build/FSharp.Core.dll"; 
+        "./build/Pop.Cs.dll";
+        "./build/Pop.dll"
+        ] 
+
+    CopyFiles nugetDir allPackageFiles
+
+    "Pop.nuspec"
+    |> NuGet (fun p -> 
+        { 
+        p with 
+            Authors = ["Andrew Chaa"]
+            Version = "0.8.1.1"
+            NoPackageAnalysis = true
+            ToolPath = @".\Nuget.exe" 
+            AccessKey = "7dc233e5-8904-46f4-8931-3d122bb6af8e"
+            OutputPath = nugetDir
+            Publish = false 
+        })
+        
+)
 
 "Clean"
 ==> "BuildApp"
+==> "CreatePackage"
 ==> "Default"
 
 RunTargetOrDefault "Default"

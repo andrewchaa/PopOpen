@@ -12,6 +12,7 @@ module ProcessFinder =
             |> Cs.InUseDetection.GetProcessesUsingFiles
             |> List.ofSeq<Process>
 
+        printfn "processes: %d" processes.Length
         match processes.Length with
         | 0 -> nativeint 0
         | _ -> processes.Head.MainWindowHandle

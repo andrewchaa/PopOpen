@@ -12,7 +12,6 @@ namespace Pop.Cs
 {
     public static class InUseDetection
     {
-//        public static IList<Process> GetProcessesUsingFiles(IList<string> filePaths)
         public static IList<Process> GetProcessesUsingFiles(IEnumerable<string> filePaths)
         {
             var filePathsList = filePaths.ToList();
