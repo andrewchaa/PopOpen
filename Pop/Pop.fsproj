@@ -51,7 +51,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="InteropNative.fs" />
-    <Compile Include="PopOpener.fs" />
+    <Compile Include="PopOpen.fs" />
     <Compile Include="PopOpenerTests.fs" />
     <None Include="packages.config" />
     <None Include="app.config" />

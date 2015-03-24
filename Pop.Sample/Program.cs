@@ -12,8 +12,9 @@ namespace Pop.Sample
     {
         static void Main(string[] args)
         {
-            var opener = new PopOpener(new ProcessStarter(), new ProcessFinder(), new Peekaboo());
-            opener.Open(Path.Combine(Environment.CurrentDirectory, "Word.docx"));
+            var file = Path.Combine(Environment.CurrentDirectory, "Word.docx");
+            PopOpen.Open(file);
+            
         }
     }
 }
