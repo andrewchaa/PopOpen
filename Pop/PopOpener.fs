@@ -32,9 +32,10 @@ module PopOpen =
             printf "handle: %d\n" handle
             counter <- counter + 1
 
-        if handle > nativeint 0 
-        then handle
-        else openingProcess.MainWindowHandle
+        if handle = nativeint 0 then handle <- openingProcess.MainWindowHandle
+        printf "handle: %d\n" handle
+
+        handle
 
 
     let GetWindowPositions (handle: IntPtr) = 
@@ -59,18 +60,15 @@ module PopOpen =
 
         handle
 
-    let Open (file: string) = 
+    let OpenX start find getPositions setPositions file = 
+        file
+        |> start
+        |> find
+        |> getPositions
+        |> setPositions
 
-        let handle =
-            file 
-            |> Start
-            |> Find
-            |> GetWindowPositions
-            |> SetWindowPositions
 
-        printfn "handle: %d\n" handle
-
-        handle
+    let Open = OpenX Start Find GetWindowPositions SetWindowPositions
         
             
             
