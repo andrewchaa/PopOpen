@@ -10,30 +10,32 @@ module PopOpen =
         let mutable handle = nativeint 0
         let mutable counter = 0
 
-        let openingProcess = file |> Process.Start
+        (file, file |> Process.Start)
 
-        while handle = nativeint 0 && counter < 7  do
-            handle <- openingProcess.MainWindowHandle
+    let Find (file: string, openingProcess: Process) =
+
+        let findHandle (file: string) =
+            file
+            |> fun f -> [f]
+            |> List.toSeq
+            |> Cs.InUseDetection.GetProcessesUsingFiles
+            |> List.ofSeq<Process>
+            |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
+
+        let mutable handle = nativeint 0
+        let mutable counter = 0
+            
+        while handle = nativeint 0 && counter < 8  do
             Thread.Sleep(1000)
+            handle <- findHandle file
             printf "counter: %d\n" counter
             printf "handle: %d\n" handle
             counter <- counter + 1
 
-        handle
+        if handle > nativeint 0 
+        then handle
+        else openingProcess.MainWindowHandle
 
-    let Find (filePath: string) =
-        let filePaths = [ filePath ]
-
-        let processes = 
-            filePaths
-            |> List.toSeq
-            |> Cs.InUseDetection.GetProcessesUsingFiles
-            |> List.ofSeq<Process>
-
-        printfn "processes: %d" processes.Length
-        match processes.Length with
-        | 0 -> nativeint 0
-        | _ -> processes.Head.MainWindowHandle
 
     let GetWindowPositions (handle: IntPtr) = 
         let mutable rect = new InteropNative.RECT()
@@ -57,40 +59,15 @@ module PopOpen =
 
         handle
 
-    let OpenInt start (file: string) =
-        file 
-        |> start
-        |> fun handle -> if handle > nativeint 0 then handle else Find file
-        |> GetWindowPositions
-        |> SetWindowPositions
-        
-
     let Open (file: string) = 
 
         let handle =
             file 
             |> Start
-            |> fun handle -> if handle > nativeint 0 then handle else Find file
+            |> Find
             |> GetWindowPositions
             |> SetWindowPositions
 
-//        let openingProcess = Start filePath
-//
-//        let mutable handle = nativeint 0
-//        let mutable counter = 0
-//
-//        while handle = nativeint 0 && counter < 10  do
-//            handle <- Find filePath
-//            Thread.Sleep(1000)
-//            printf "counter: %d\n" counter
-//            counter <- counter + 1
-//
-//        handle <-
-//            filePath
-//            |> Find
-//            |> GetWindowPositions
-//            |> SetWindowPositions
-//
         printfn "handle: %d\n" handle
 
         handle
