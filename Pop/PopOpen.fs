@@ -7,7 +7,7 @@ open System.Threading
 module PopOpen =
 
     let internal Start (file: string) =
-        (file, file |> Process.Start)
+        file |> Process.Start
 
     
     let internal FindLockingHandle (file: string) =
@@ -17,14 +17,14 @@ module PopOpen =
         |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
 
 
-    let Find findLockingHandle (file: string, openingProcess: Process) =
-
+    let Find func (file: string, openingProcess: Process) = 
         let mutable handle = nativeint 0
         let mutable counter = 0
             
         while handle = nativeint 0 && counter < 8  do
-            Thread.Sleep(1000)
-            handle <- findLockingHandle file
+            Thread.Sleep 1000
+
+            handle <- func file
             Debug.WriteLine ("Counter: {0}, Handle: {1}", counter, handle)
             counter <- counter + 1
 
@@ -33,7 +33,11 @@ module PopOpen =
         handle
 
 
-    let internal GetWindowPositions (handle: IntPtr) = 
+    let internal PopUp (handle: IntPtr) =
+        let HWND_TOPMOST = new IntPtr -1
+        let HWND_NOTOPMOST = new IntPtr -2;
+        let SWP_SHOWWINDOW = 0x0040u
+
         let mutable rect = new InteropNative.RECT()
         let result = InteropNative.GetWindowRect(handle, &rect)
 
@@ -42,28 +46,22 @@ module PopOpen =
         rect.Width <- rect.Right - rect.Left
         rect.Height <- rect.Bottom - rect.Top
 
-        (handle, rect)
-
-    let internal SetWindowPositions (handle: IntPtr, rect: InteropNative.RECT) =
-
-        let HWND_TOPMOST = new IntPtr -1
-        let HWND_NOTOPMOST = new IntPtr -2;
-        let SWP_SHOWWINDOW = 0x0040u
-
-        let topWindowResult = InteropNative.SetWindowPos (handle, HWND_TOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW)
-        let noTopWindowResult = InteropNative.SetWindowPos (handle, HWND_NOTOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW)
+        InteropNative.SetWindowPos (handle, HWND_TOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW) |> ignore
+        InteropNative.SetWindowPos (handle, HWND_NOTOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW) |> ignore
 
         handle
 
-    let OpenInternal start flp getPositions setPositions file = 
-        file
-        |> start
-        |> Find flp
-        |> getPositions
-        |> setPositions
 
+    let OpenInternal start func file = 
+        let openingProcess = file |> start
 
-    let Open (file: string) = OpenInternal Start FindLockingHandle GetWindowPositions SetWindowPositions file
+        let handle = Find func (file, openingProcess)
+        PopUp handle
+
+//        |> Find flp
+//        |> PopUp
+
+    let Open (file: string) = OpenInternal Start FindLockingHandle file
         
             
             

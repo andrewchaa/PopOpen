@@ -72,6 +72,7 @@
     <Content Include="IAmTextFile.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Sandbox.fsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pop.Cs\Pop.Cs.csproj">
