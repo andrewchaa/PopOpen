@@ -6,29 +6,35 @@ open System.Threading
 
 module PopOpen =
 
-    let internal Start (file: string) =
-        file |> Process.Start
+    type PopProcess() =
+        
+        let mutable oProcess = new Process()
+        
+        member p.Start (file: string) = file |> Process.Start |> fun p -> oProcess <- p
+        member p.Handle = oProcess.MainWindowHandle
+
+//    let internal Start (file: string) =
+//        file |> Process.Start
 
     
-    let internal FindLockingHandle (file: string) =
-        file
-        |> fun f -> Cs.InUseDetection.GetProcessesUsingFiles [f]
-        |> List.ofSeq<Process>
-        |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
 
 
-    let Find func (file: string, openingProcess: Process) = 
+    let Find (file: string) = 
+        let getHandle (file: string) =
+            file
+            |> fun f -> Cs.InUseDetection.GetProcessesUsingFiles [f]
+            |> List.ofSeq<Process>
+            |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
+
         let mutable handle = nativeint 0
         let mutable counter = 0
             
         while handle = nativeint 0 && counter < 8  do
             Thread.Sleep 1000
 
-            handle <- func file
+            handle <- getHandle file
             Debug.WriteLine ("Counter: {0}, Handle: {1}", counter, handle)
             counter <- counter + 1
-
-        if handle = nativeint 0 then handle <- openingProcess.MainWindowHandle
 
         handle
 
@@ -52,16 +58,21 @@ module PopOpen =
         handle
 
 
-    let OpenInternal start func file = 
-        let openingProcess = file |> start
+    let OpenInternal start file handle = 
+        file |> start
 
-        let handle = Find func (file, openingProcess)
+        let handle = Find file
+        if handle <> nativeint 0 
+        then PopUp handle |> ignore
+        else handle |> PopUp |> ignore
+
         PopUp handle
 
-//        |> Find flp
-//        |> PopUp
 
-    let Open (file: string) = OpenInternal Start FindLockingHandle file
+    let Open (file: string) = 
+        let popProcess = new PopProcess()
+
+        OpenInternal popProcess.Start file popProcess.Handle
         
             
             

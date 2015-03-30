@@ -1,5 +1,6 @@
 // by Stephen Toub
 // from https://msdn.microsoft.com/en-us/magazine/cc163450.aspx
+// under Microsoft Limited Public License (https://msdn.microsoft.com/en-us/cc300389.aspx)
 
 using System;
 using System.Collections.Generic;
