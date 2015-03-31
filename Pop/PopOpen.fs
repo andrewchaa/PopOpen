@@ -6,15 +6,13 @@ open System.Threading
 
 module PopOpen =
 
-    type PopProcess() =
-        
-        let mutable oProcess = new Process()
-        
-        member p.Start (file: string) = file |> Process.Start |> fun p -> oProcess <- p
-        member p.Handle = oProcess.MainWindowHandle
+    let Start (file: string) =
+        file |> Process.Start
 
+    let GetProcessHandle (prc: Process) =
+        prc.MainWindowHandle
 
-    let GetLockingProcessHandle (file: string) =
+    let GetLockHandle (file: string) =
         file
         |> fun f -> Cs.InUseDetection.GetProcessesUsingFiles [f]
         |> List.ofSeq<Process>
@@ -54,19 +52,17 @@ module PopOpen =
         handle
 
 
-    let OpenInternal start file handle getLockingProcessHandle = 
-        file |> start
+    let OpenInternal start file getLockHandle getProcessHandle = 
+        let openProcess = file |> start
 
-        let winHandle = Find file getLockingProcessHandle
+        let winHandle = Find file getLockHandle
         if winHandle <> nativeint 0 
         then winHandle |> PopUp
-        else handle |> PopUp
+        else openProcess |> getProcessHandle |> PopUp
 
 
     let Open (file: string) = 
-        let popProcess = new PopProcess()
-
-        OpenInternal popProcess.Start file popProcess.Handle GetLockingProcessHandle
+        OpenInternal Start file GetLockHandle GetProcessHandle
         
             
             
