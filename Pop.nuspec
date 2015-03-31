@@ -5,11 +5,13 @@
     <version>$version$</version>
     <title>Pop Open</title>
     <authors>Andrew Chaa</authors>
-    <owners>Huddle</owners>
+    <owners>Andrew Chaa</owners>
     <projectUrl>https://github.com/andrewchaa/PopOpen</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Open a document in the foreground by elevated the opening process to the top window</description>
-    <copyright>Copyleft 2015</copyright>
+    <description>
+      PopOpen is a tiny library that opens a document, find the associated application's process, and push the window handle to top most window, so that users can see the document is opened.
+    </description>
+    <copyright>Copyright 2015, MIT License</copyright>
     <tags>Windows, Open, Win api</tags>
     <dependencies>
       <dependency id="FSharp.Core" version="3.1.0" />
