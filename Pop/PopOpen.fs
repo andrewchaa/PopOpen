@@ -18,13 +18,13 @@ module PopOpen =
 
     
 
+    let GetLockingProcessHandle (file: string) =
+        file
+        |> fun f -> Cs.InUseDetection.GetProcessesUsingFiles [f]
+        |> List.ofSeq<Process>
+        |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
 
-    let Find (file: string) = 
-        let getHandle (file: string) =
-            file
-            |> fun f -> Cs.InUseDetection.GetProcessesUsingFiles [f]
-            |> List.ofSeq<Process>
-            |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
+    let Find (file: string) func = 
 
         let mutable handle = nativeint 0
         let mutable counter = 0
@@ -32,7 +32,7 @@ module PopOpen =
         while handle = nativeint 0 && counter < 8  do
             Thread.Sleep 1000
 
-            handle <- getHandle file
+            handle <- func file
             Debug.WriteLine ("Counter: {0}, Handle: {1}", counter, handle)
             counter <- counter + 1
 
@@ -58,21 +58,19 @@ module PopOpen =
         handle
 
 
-    let OpenInternal start file handle = 
+    let OpenInternal start file handle getLockingProcessHandle = 
         file |> start
 
-        let handle = Find file
-        if handle <> nativeint 0 
-        then PopUp handle |> ignore
-        else handle |> PopUp |> ignore
-
-        PopUp handle
+        let winHandle = Find file getLockingProcessHandle
+        if winHandle <> nativeint 0 
+        then winHandle |> PopUp
+        else handle |> PopUp
 
 
     let Open (file: string) = 
         let popProcess = new PopProcess()
 
-        OpenInternal popProcess.Start file popProcess.Handle
+        OpenInternal popProcess.Start file popProcess.Handle GetLockingProcessHandle
         
             
             
