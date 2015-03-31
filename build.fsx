@@ -39,7 +39,6 @@ Target "CreatePackage" (fun _ ->
             Version = "0.8.2.2"
             NoPackageAnalysis = true
             ToolPath = @".\Nuget.exe" 
-            AccessKey = "7dc233e5-8904-46f4-8931-3d122bb6af8e"
             OutputPath = nugetDir
             Publish = false 
         })
