@@ -13,10 +13,6 @@ module PopOpen =
         member p.Start (file: string) = file |> Process.Start |> fun p -> oProcess <- p
         member p.Handle = oProcess.MainWindowHandle
 
-//    let internal Start (file: string) =
-//        file |> Process.Start
-
-    
 
     let GetLockingProcessHandle (file: string) =
         file
