@@ -6,6 +6,7 @@ Open a document in the foreground
 * Find the process of the application
 * Push the application to the top most active window
 * Install the nuget package to use it from C#
+* [License: MIT](../master/LICENSE.md)
 
 More technical details.
 
