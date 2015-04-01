@@ -8,7 +8,15 @@ Open a document in the foreground
 * Install the nuget package to use it from C#
 * [License: MIT](../master/LICENSE.md)
 
-More technical details.
+### To install
+
+```
+PM> Install-Package PopOpen
+```
+
+Visit https://www.nuget.org/packages/PopOpen/ for more package details
+
+### Technical details.
 
 * Process.Start() will open a document with an associated application
 * Restart Manager (rstrtmgr.dll) can identify what process is locking a file (https://msdn.microsoft.com/en-us/magazine/cc163450.aspx)
