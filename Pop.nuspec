@@ -5,8 +5,8 @@
     <version>$version$</version>
     <title>Pop Open</title>
     <authors>Andrew Chaa</authors>
-    <owners>Andrew Chaa</owners>
     <projectUrl>https://github.com/andrewchaa/PopOpen</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/andrewchaa/PopOpen/master/LICENSE.md</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       PopOpen is a tiny library that opens a document, find the associated application's process, and push the window handle to top most window, so that users can see the document is opened.
