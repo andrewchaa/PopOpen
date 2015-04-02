@@ -22,17 +22,16 @@ module PopOpen =
         |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
 
 
-    let internal Find getLockHandle getProcessHandle waitTime ((file: string), (p: Process)) = 
+    let internal Find getLockHandle getProcessHandle (waitSeconds: int) ((file: string), (p: Process)) = 
 
         let mutable handle = nativeint 0
-        let mutable counter = 0
-            
-        while handle = nativeint 0 && counter < waitTime  do
+        let timeWeShouldStop = DateTime.Now.AddSeconds(float waitSeconds)
+
+        while handle = nativeint 0 && DateTime.Now < timeWeShouldStop  do
             Thread.Sleep 1000
 
             handle <- getLockHandle file
-            Debug.WriteLine ("Counter: {0}, Handle: {1}", counter, handle)
-            counter <- counter + 1
+            Debug.WriteLine ("Handle: {0}", handle)
 
         if handle = nativeint 0 then getProcessHandle p
         else handle
@@ -57,7 +56,7 @@ module PopOpen =
         handle
 
 
-    let OpenInternal start file waitTime getLockHandle getProcessHandle = 
+    let OpenInternal start file (waitTime: int) getLockHandle getProcessHandle = 
 
         file 
         |> start 
