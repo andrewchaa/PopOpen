@@ -18,8 +18,16 @@ Target "BuildApp" (fun _ ->
         |> Log "Build-Output"
 )
 
-Target "Default" (fun _ -> 
-    trace "The build is complete"
+Target "Run tests" (fun _ -> 
+    trace "Running tests ..."
+
+    !! "./PopFs.Tests/bin/Debug/*.Tests.dll"
+        |> NUnit (fun p -> 
+            { 
+                p with
+                    DisableShadowCopy = true;
+            }
+        )
 )
 
 Target "CreatePackage" (fun _ ->
@@ -45,8 +53,14 @@ Target "CreatePackage" (fun _ ->
         
 )
 
+Target "Default" (fun _ -> 
+    trace "The build is complete"
+)
+
+
 "Clean"
 ==> "BuildApp"
+==> "Run tests"
 ==> "CreatePackage"
 ==> "Default"
 

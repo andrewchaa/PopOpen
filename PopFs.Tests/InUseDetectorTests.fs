@@ -17,5 +17,5 @@ type ``Given InUseDetection`` ()=
         InUseDetection.GetProcessesUsingFiles [file]
 
     [<Test>] member t.
-        ``When it opens a text file`` ()=
-            openFile |> should haveCount 1
+        ``It can't find the locking handle for text file`` ()=
+            openFile |> should haveCount 0
