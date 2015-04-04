@@ -7,12 +7,17 @@ open Pop.Cs
 
 module PopOpen =
 
+    type Result<'nativeint> =
+        | Success
+        | Failure
+
     let internal Start (file: string) =
         file, file |> Process.Start
 
 
     let internal GetProcessHandle (prc: Process) =
-        prc.MainWindowHandle
+        if prc = null then nativeint 0
+        else prc.MainWindowHandle
 
 
     let internal GetLockHandle (file: string) =
