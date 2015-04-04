@@ -28,6 +28,11 @@ type ``Given PopOpener`` ()=
     [<Test>] member t.
         ``When it opens the second powerpoint file`` ()=
             PopOpen.Open (Path.Combine(Environment.CurrentDirectory, "Powerpoint 2.pptx")) |> should not' (equal 0)
+    
     [<Test>] member t.
         ``When it opens a text file`` ()=
             PopOpen.Open (Path.Combine(Environment.CurrentDirectory, "IAmTextFile.txt")) |> should not' (equal 0)
+
+    [<Test>] member t.
+        ``When it opens a picture`` ()=
+            PopOpen.Open (Path.Combine(Environment.CurrentDirectory, "Picture.jpg")) |> should not' (equal 0)

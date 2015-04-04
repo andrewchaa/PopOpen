@@ -22,20 +22,25 @@ module PopOpen =
         |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
 
 
+    let internal SelectHandle (x: nativeint) (y: nativeint) = 
+        if x <> nativeint 0 then x
+        else y                            
+
+    let internal WaitingFor handle timeToStop =
+        handle = nativeint 0 && DateTime.Now < timeToStop
+
     let internal Find getLockHandle getProcessHandle (waitSeconds: int) ((file: string), (p: Process)) = 
 
         let mutable handle = nativeint 0
-        let timeWeShouldStop = DateTime.Now.AddSeconds(float waitSeconds)
+        let timeToStop = DateTime.Now.AddSeconds(float waitSeconds)
 
-        while handle = nativeint 0 && DateTime.Now < timeWeShouldStop  do
+        while WaitingFor handle timeToStop  do
             Thread.Sleep 1000
 
-            handle <- getLockHandle file
+            handle <- SelectHandle (getLockHandle file) (getProcessHandle p)
             Debug.WriteLine ("Handle: {0}", handle)
 
-        if handle = nativeint 0 then getProcessHandle p
-        else handle
-
+        handle
 
     let internal PopUp handle =
         let HWND_TOPMOST = new IntPtr -1

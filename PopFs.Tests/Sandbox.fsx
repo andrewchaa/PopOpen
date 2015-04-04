@@ -54,3 +54,11 @@ let fncombined = async {
 fncombined
 |> Async.RunSynchronously
 |> printfn "%A"
+
+
+let pr1 (x: string) = async { do printf "%s1" x }
+let pr2 (x: string) = async { do printf "%s2" x }
+
+[pr1 "A"; pr2 "B"]
+|> Async.Parallel
+|> Async.RunSynchronously
