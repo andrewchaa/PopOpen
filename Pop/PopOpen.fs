@@ -16,8 +16,11 @@ module PopOpen =
 
 
     let internal GetProcessHandle (prc: Process) =
-        if prc = null then nativeint 0
-        else prc.MainWindowHandle
+        try
+            prc.MainWindowHandle
+        with
+            | :? System.InvalidOperationException -> nativeint 0
+            | :? System.NullReferenceException -> nativeint 0
 
 
     let internal GetLockHandle (file: string) =
@@ -74,8 +77,10 @@ module PopOpen =
         |> PopUp
 
 
+    let WaitSeconds = 30
+
     let Open (file: string) = 
-        OpenInternal Start file 8 GetLockHandle GetProcessHandle
+        OpenInternal Start file WaitSeconds GetLockHandle GetProcessHandle
 
     let OpenW (file: string, waitSeconds) = 
         OpenInternal Start file waitSeconds GetLockHandle GetProcessHandle
@@ -84,7 +89,7 @@ module PopOpen =
 type Launcher () = 
     interface IPopOpen with
         member x.Open (file: string) = 
-            PopOpen.OpenInternal PopOpen.Start file 8 PopOpen.GetLockHandle PopOpen.GetProcessHandle
+            PopOpen.OpenInternal PopOpen.Start file PopOpen.WaitSeconds PopOpen.GetLockHandle PopOpen.GetProcessHandle
     
         member x.Open (file: string, waitSeconds: int) =
             PopOpen.OpenInternal PopOpen.Start file waitSeconds PopOpen.GetLockHandle PopOpen.GetProcessHandle
