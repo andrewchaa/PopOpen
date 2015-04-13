@@ -50,7 +50,7 @@ module PopOpen =
 
         handle
 
-    let internal PopUp handle =
+    let PopUp handle =
         let HWND_TOPMOST = new IntPtr -1
         let HWND_NOTOPMOST = new IntPtr -2;
         let SWP_SHOWWINDOW = 0x0040u
