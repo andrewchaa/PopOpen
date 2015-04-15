@@ -9,8 +9,7 @@ namespace Pop.Sample
         static void Main(string[] args)
         {
             var file = Path.Combine(Environment.CurrentDirectory, "Word.docx");
-            IPopOpen launcher = new Launcher();
-            launcher.Open(file);
+            PopOpen.Open(file);
         }
     }
 }
