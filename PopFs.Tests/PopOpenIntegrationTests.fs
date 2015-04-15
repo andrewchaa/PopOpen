@@ -14,6 +14,10 @@ type ``Given PopOpener`` ()=
             PopOpen.OpenW ((Path.Combine(Environment.CurrentDirectory, "Word.docx")), 10) |> should not' (equal 0)
 
     [<Test>] member t.
+        ``When it opens a word file in a debug mode`` ()= 
+            PopOpen.OpenD (Path.Combine(Environment.CurrentDirectory, "Word.docx")) |> should not' (equal 0)
+
+    [<Test>] member t.
         ``When it opens the first excel file`` ()=
             PopOpen.OpenW ((Path.Combine(Environment.CurrentDirectory, "Excel 1.xlsx")), 10) |> should not' (equal 0)
             

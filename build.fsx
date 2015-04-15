@@ -44,7 +44,7 @@ Target "CreatePackage" (fun _ ->
         { 
         p with 
             Authors = ["Andrew Chaa"]
-            Version = "0.8.5.0"
+            Version = "0.8.5.1"
             NoPackageAnalysis = true
             ToolPath = @".\Nuget.exe" 
             OutputPath = nugetDir

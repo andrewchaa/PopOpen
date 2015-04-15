@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="InteropNative.fs" />
     <Compile Include="PopOpen.fs" />
-    <None Include="packages.config" />
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
