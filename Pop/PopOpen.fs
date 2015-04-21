@@ -25,10 +25,14 @@ module PopOpen =
 
 
     let internal GetLockHandle (file: string) =
+        
         file
-        |> fun f -> Cs.InUseDetection.GetProcessesUsingFiles [f]
+        |> fun f -> [f]
+        |> InUseDetection.GetProcessesUsingFiles
         |> List.ofSeq<Process>
-        |> fun p -> if p.Length = 0 then nativeint 0 else p.Head.MainWindowHandle
+        |> fun ps -> match ps with
+                     | [] -> nativeint 0
+                     | p :: _ -> p.MainWindowHandle
 
 
     let internal SelectHandle (x: nativeint) (y: nativeint) log = 
@@ -57,6 +61,8 @@ module PopOpen =
 
     let PopUp getLockHandle getProcessHandle (waitTime: float) log ((file: string), (p: Process)) =
         let timeToStop = DateTime.UtcNow.AddSeconds(waitTime)
+
+        
 
         let rec popUpLoop oldHandle currentTime =
             Thread.Sleep 500
