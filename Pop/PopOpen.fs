@@ -12,21 +12,26 @@ module PopOpen =
         | Success
         | Failure
 
-    let internal Start (file: string) =
-        file, file |> Process.Start
+    
+    type Input = { File: string; Prc: Process }
 
+    let internal Start (file: string) = 
+        {
+            File = file;
+            Prc = file |> Process.Start
+        }
 
-    let internal GetProcessHandle (prc: Process) =
+    let internal GetProcessHandle (input : Input) =
         try
-            prc.MainWindowHandle
+            input.Prc.MainWindowHandle
         with
             | :? System.InvalidOperationException -> nativeint 0
             | :? System.NullReferenceException -> nativeint 0
 
 
-    let internal GetLockHandle (file: string) =
+    let internal GetLockHandle (input: Input) =
         
-        file
+        input.File
         |> fun f -> [f]
         |> InUseDetection.GetProcessesUsingFiles
         |> List.ofSeq<Process>
@@ -59,14 +64,12 @@ module PopOpen =
         ()
 
 
-    let PopUp getLockHandle getProcessHandle (waitTime: float) log ((file: string), (p: Process)) =
+    let PopUp getLockHandle getProcessHandle (waitTime: float) log (input: Input) =
         let timeToStop = DateTime.UtcNow.AddSeconds(waitTime)
-
-        
 
         let rec popUpLoop oldHandle currentTime =
             Thread.Sleep 500
-            let newHandle = SelectHandle (getLockHandle file) (getProcessHandle p) log
+            let newHandle = SelectHandle (getLockHandle input) (getProcessHandle input) log
             log ("Old: " + oldHandle.ToString() + " New: " + newHandle.ToString())
 
             if (oldHandle <> newHandle) then BringToFront newHandle log
