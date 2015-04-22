@@ -10,17 +10,17 @@ open PopOpen
 type ``Given OpenInternal`` ()=
     
     let FakeStart i = i
-    let FakeFindProcHandle i = i
-    let FakeFindLockHandle i = i
+    let FakeFindProcHandle _ = nativeint 0
+    let FakeFindLockHandle _ = nativeint 0
     let SelectHandle i j k = if i > j then i else j
     let Log f = ()
 
 
 //    [<Test>]
 //    member x. ``It should start the process`` () = 
-//        let FakeStart _ = "Start called"
+//        let FakeStart _ = { File = "Start called"; Prc = new Process() }
 //
-//        OpenInternal FakeStart 1 FakeFindLockHandle FakeFindProcHandle Log "test.txt" |> should equal "Start called"
+//        OpenInternal FakeStart 1 FakeFindLockHandle FakeFindProcHandle SelectHandle Log "test.txt" |> should equal "Start called"
 
 //    [<Test>]
 //    member x. ``It should find the process handle`` () =
