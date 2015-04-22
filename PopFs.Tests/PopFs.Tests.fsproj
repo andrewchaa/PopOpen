@@ -49,8 +49,8 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="PopOpenTests.fs" />
-    <Compile Include="PopOpenIntegrationTests.fs" />
+    <Compile Include="UnitTests.fs" />
+    <Compile Include="IntegrationTests.fs" />
     <Compile Include="InUseDetectorTests.fs" />
     <None Include="packages.config" />
     <None Include="app.config" />
