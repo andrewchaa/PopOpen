@@ -83,7 +83,7 @@ module PopOpen =
         popUpLoop (nativeint 0) DateTime.UtcNow            
             
 
-    let OpenInternal start file (waitTime: int) getLockHandle getProcessHandle log = 
+    let OpenInternal start (waitTime: int) getLockHandle getProcessHandle log file = 
 
         file 
         |> start 
@@ -93,10 +93,10 @@ module PopOpen =
     let WaitSeconds = 30
 
     let Open (file: string) = 
-        OpenInternal Start file WaitSeconds GetLockHandle GetProcessHandle (fun f -> Debug.WriteLine f)
+        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle (fun f -> Debug.WriteLine f) file 
 
     let OpenW (file: string, waitSeconds) = 
-        OpenInternal Start file waitSeconds GetLockHandle GetProcessHandle (fun f -> Debug.WriteLine f)
+        OpenInternal Start waitSeconds GetLockHandle GetProcessHandle (fun f -> Debug.WriteLine f) file
 
 
     let logToFile (l: string) =
@@ -108,4 +108,4 @@ module PopOpen =
         ()
 
     let OpenD (file: string) = 
-        OpenInternal Start file WaitSeconds GetLockHandle GetProcessHandle (fun f ->  logToFile f)
+        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle (fun f ->  logToFile f) file
