@@ -12,7 +12,7 @@ type ``Given OpenInternal`` ()=
     let FakeStart i = i
     let FakeFindProcHandle i = i
     let FakeFindLockHandle i = i
-    let SelectHandle i j k = i k 
+    let SelectHandle i j k = if i > j then i else j
     let Log f = ()
 
 
@@ -20,8 +20,8 @@ type ``Given OpenInternal`` ()=
 //    member x. ``It should start the process`` () = 
 //        let FakeStart _ = "Start called"
 //
-//        OpenInternal FakeStart 1 FakeFindLockHandle FakeFindProcHandle SelectHandle Log "test.txt" |> should equal "Start called"
-//
+//        OpenInternal FakeStart 1 FakeFindLockHandle FakeFindProcHandle Log "test.txt" |> should equal "Start called"
+
 //    [<Test>]
 //    member x. ``It should find the process handle`` () =
 //        let FakeFindProcHandle _ = "Proc handle found"
@@ -42,7 +42,7 @@ type ``Given OpenInternal`` ()=
         let getLockHandle f = nativeint 10
         let getProcessHandle p = nativeint 0
 
-        PopOpen.OpenInternal start 1 getLockHandle getProcessHandle Log "file" |> should equal (nativeint 10)
+        PopOpen.OpenInternal start 1 getLockHandle getProcessHandle SelectHandle Log "file" |> should equal (nativeint 10)
 
     [<Test>] 
     member x. ``When can't find the locking handle of a file, it uses the handle from Process.Start`` ()=
@@ -51,6 +51,6 @@ type ``Given OpenInternal`` ()=
         let getProcessHandle p = nativeint 10
         let Log f = ()
 
-        PopOpen.OpenInternal start 1 getLockHandle getProcessHandle Log "file" |> should equal (nativeint 10)
+        PopOpen.OpenInternal start 1 getLockHandle getProcessHandle SelectHandle Log "file" |> should equal (nativeint 10)
 
 

@@ -64,12 +64,12 @@ module PopOpen =
         ()
 
 
-    let PopUp getLockHandle getProcessHandle (waitTime: float) log (input: Input) =
+    let PopUp getLockHandle getProcessHandle selectHandle (waitTime: float) log (input: Input) =
         let timeToStop = DateTime.UtcNow.AddSeconds(waitTime)
 
         let rec popUpLoop oldHandle currentTime =
             Thread.Sleep 500
-            let newHandle = SelectHandle (getLockHandle input) (getProcessHandle input) log
+            let newHandle = selectHandle (getLockHandle input) (getProcessHandle input) log
             log ("Old: " + oldHandle.ToString() + " New: " + newHandle.ToString())
 
             if (oldHandle <> newHandle) then BringToFront newHandle log
@@ -83,21 +83,20 @@ module PopOpen =
         popUpLoop (nativeint 0) DateTime.UtcNow            
             
 
-    let OpenInternal start (waitTime: int) getLockHandle getProcessHandle log file = 
+    let OpenInternal start (waitTime: int) getLockHandle getProcessHandle selectHandle log file = 
 
         file 
         |> start 
-        |> PopUp getLockHandle getProcessHandle (float waitTime) log
+        |> PopUp getLockHandle getProcessHandle selectHandle (float waitTime) log
 
 
     let WaitSeconds = 30
 
     let Open (file: string) = 
-        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle (fun f -> Debug.WriteLine f) file 
+        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file 
 
     let OpenW (file: string, waitSeconds) = 
-        OpenInternal Start waitSeconds GetLockHandle GetProcessHandle (fun f -> Debug.WriteLine f) file
-
+        OpenInternal Start waitSeconds GetLockHandle GetProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file
 
     let logToFile (l: string) =
         let path = Path.Combine(Path.GetTempPath(), "pop.log")
@@ -108,4 +107,4 @@ module PopOpen =
         ()
 
     let OpenD (file: string) = 
-        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle (fun f ->  logToFile f) file
+        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle SelectHandle (fun f ->  logToFile f) file
