@@ -40,10 +40,15 @@ module PopOpen =
                      | p :: _ -> p.MainWindowHandle
 
 
-    let internal SelectHandle (x: nativeint) (y: nativeint) log = 
-        log (String.Format("Lock Handle: {0}, Proc Handle: {1}", x, y))
-        if x <> nativeint 0 then x
-        else y                            
+    let internal SelectHandle getProcHandle getLockHandle (input: Input) log = 
+        let procHandle = getProcHandle input
+        let lockHandle = getLockHandle input
+        
+        log (String.Format("Lock Handle: {0}, Proc Handle: {1}", lockHandle, procHandle))
+
+        match lockHandle with
+        | 0n -> procHandle
+        | _ -> lockHandle
 
 
     let BringToFront handle log =
@@ -69,7 +74,8 @@ module PopOpen =
 
         let rec popUpLoop oldHandle currentTime =
             Thread.Sleep 500
-            let newHandle = selectHandle (getLockHandle input) (getProcessHandle input) log
+
+            let newHandle = selectHandle getLockHandle getProcessHandle input log
             log ("Old: " + oldHandle.ToString() + " New: " + newHandle.ToString())
 
             if (oldHandle <> newHandle) then BringToFront newHandle log
@@ -83,11 +89,11 @@ module PopOpen =
         popUpLoop (nativeint 0) DateTime.UtcNow            
             
 
-    let OpenInternal start (waitTime: int) getLockHandle getProcessHandle selectHandle log file = 
+    let OpenInternal start (waitTime: int) findLockHandle getProcessHandle selectHandle log file = 
 
         file 
         |> start 
-        |> PopUp getLockHandle getProcessHandle selectHandle (float waitTime) log
+        |> PopUp findLockHandle getProcessHandle selectHandle (float waitTime) log
 
 
     let WaitSeconds = 30

@@ -5,6 +5,7 @@ open FsUnit
 open System.Diagnostics
 open Pop
 open PopOpen
+open System
 
 [<TestFixture>]
 type ``Given OpenInternal`` ()=
@@ -12,8 +13,13 @@ type ``Given OpenInternal`` ()=
     let FakeStart i = i
     let FakeFindProcHandle _ = nativeint 0
     let FakeFindLockHandle _ = nativeint 0
-    let SelectHandle i j k = if i > j then i else j
-    let Log f = ()
+    let Log (f: string) = Console.WriteLine f  
+    let SelectHandle i j (k: Input) Log  = 
+        let r1 = i k
+        let r2 = j k
+        match r1 with
+        | 0n -> r2
+        | _ -> r1
 
 
 //    [<Test>]
@@ -39,18 +45,17 @@ type ``Given OpenInternal`` ()=
     [<Test>] 
     member x. ``When find the locking handle of a file, it uses it`` ()=
         let start f = { File = f; Prc = new Process() }
-        let getLockHandle f = nativeint 10
-        let getProcessHandle p = nativeint 0
+        let FakeFindProcHandle f = nativeint 0
+        let FakeFindLockHandle p = nativeint 10
 
-        PopOpen.OpenInternal start 1 getLockHandle getProcessHandle SelectHandle Log "file" |> should equal (nativeint 10)
+        OpenInternal start 1 FakeFindLockHandle FakeFindProcHandle SelectHandle Log "file" |> should equal (nativeint 10)
 
     [<Test>] 
-    member x. ``When can't find the locking handle of a file, it uses the handle from Process.Start`` ()=
+    member x. ``If you can't find the lock handle, use the proc handle`` ()=
         let start f = { File = f; Prc = new Process() }
-        let getLockHandle f = nativeint 0
-        let getProcessHandle p = nativeint 10
-        let Log f = ()
+        let FakeFindLockHandle _  = 0n
+        let FakeFindProcHandle _  = 20n
 
-        PopOpen.OpenInternal start 1 getLockHandle getProcessHandle SelectHandle Log "file" |> should equal (nativeint 10)
+        OpenInternal start 1 FakeFindLockHandle FakeFindProcHandle SelectHandle Log "file" |> should equal (nativeint 20)
 
 
