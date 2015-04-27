@@ -8,9 +8,9 @@ open Pop.Cs
 
 module PopOpen =
 
-    type Result<'nativeint> =
-        | Success
-        | Failure
+    type Result<'TEntity> =
+        | Success of 'TEntity
+        | Failure of string
 
     
     type Input = { File: string; Prc: Process }
@@ -23,10 +23,10 @@ module PopOpen =
 
     let internal FindProcessHandle (input : Input) =
         try
-            input.Prc.MainWindowHandle
+            Success input.Prc.MainWindowHandle
         with
-            | :? System.InvalidOperationException -> nativeint 0
-            | :? System.NullReferenceException -> nativeint 0
+            | :? System.InvalidOperationException -> Failure "InvalidOperationException"
+            | :? System.NullReferenceException -> Failure "NullReferenceException"
 
 
     let internal FindLockHandle (input: Input) =
@@ -36,8 +36,8 @@ module PopOpen =
         |> InUseDetection.GetProcessesUsingFiles
         |> List.ofSeq<Process>
         |> fun ps -> match ps with
-                     | [] -> nativeint 0
-                     | p :: _ -> p.MainWindowHandle
+                     | [] -> Failure "Can't find the process"
+                     | p :: _ -> Success p.MainWindowHandle
 
 
     let internal SelectHandle getProcHandle findLockHandle (input: Input) log = 
@@ -47,8 +47,10 @@ module PopOpen =
         log (String.Format("Lock Handle: {0}, Proc Handle: {1}", lockHandle, procHandle))
 
         match lockHandle with
-        | 0n -> procHandle
-        | _ -> lockHandle
+        | Success h -> h
+        | Failure s -> match procHandle with
+                       | Success h -> h
+                       | Failure s -> 0n
 
 
     let BringToFront handle log =
