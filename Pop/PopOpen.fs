@@ -21,7 +21,7 @@ module PopOpen =
             Prc = file |> Process.Start
         }
 
-    let internal GetProcessHandle (input : Input) =
+    let internal FindProcessHandle (input : Input) =
         try
             input.Prc.MainWindowHandle
         with
@@ -29,7 +29,7 @@ module PopOpen =
             | :? System.NullReferenceException -> nativeint 0
 
 
-    let internal GetLockHandle (input: Input) =
+    let internal FindLockHandle (input: Input) =
         
         input.File
         |> fun f -> [f]
@@ -40,9 +40,9 @@ module PopOpen =
                      | p :: _ -> p.MainWindowHandle
 
 
-    let internal SelectHandle getProcHandle getLockHandle (input: Input) log = 
+    let internal SelectHandle getProcHandle findLockHandle (input: Input) log = 
         let procHandle = getProcHandle input
-        let lockHandle = getLockHandle input
+        let lockHandle = findLockHandle input
         
         log (String.Format("Lock Handle: {0}, Proc Handle: {1}", lockHandle, procHandle))
 
@@ -69,13 +69,13 @@ module PopOpen =
         ()
 
 
-    let PopUp getLockHandle getProcessHandle selectHandle (waitTime: float) log (input: Input) =
+    let PopUp findLockHandle findProcessHandle selectHandle (waitTime: float) log (input: Input) =
         let timeToStop = DateTime.UtcNow.AddSeconds(waitTime)
 
         let rec popUpLoop oldHandle currentTime =
             Thread.Sleep 500
 
-            let newHandle = selectHandle getLockHandle getProcessHandle input log
+            let newHandle = selectHandle findLockHandle findProcessHandle input log
             log ("Old: " + oldHandle.ToString() + " New: " + newHandle.ToString())
 
             if (oldHandle <> newHandle) then BringToFront newHandle log
@@ -89,20 +89,20 @@ module PopOpen =
         popUpLoop (nativeint 0) DateTime.UtcNow            
             
 
-    let OpenInternal start (waitTime: int) findLockHandle getProcessHandle selectHandle log file = 
+    let OpenInternal start (waitTime: int) findLockHandle findProcessHandle selectHandle log file = 
 
         file 
         |> start 
-        |> PopUp findLockHandle getProcessHandle selectHandle (float waitTime) log
+        |> PopUp findLockHandle findProcessHandle selectHandle (float waitTime) log
 
 
     let WaitSeconds = 30
 
     let Open (file: string) = 
-        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file 
+        OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file 
 
     let OpenW (file: string, waitSeconds) = 
-        OpenInternal Start waitSeconds GetLockHandle GetProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file
+        OpenInternal Start waitSeconds FindLockHandle FindProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file
 
     let logToFile (l: string) =
         let path = Path.Combine(Path.GetTempPath(), "pop.log")
@@ -113,4 +113,4 @@ module PopOpen =
         ()
 
     let OpenD (file: string) = 
-        OpenInternal Start WaitSeconds GetLockHandle GetProcessHandle SelectHandle (fun f ->  logToFile f) file
+        OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle SelectHandle (fun f ->  logToFile f) file
