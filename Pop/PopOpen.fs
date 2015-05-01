@@ -67,6 +67,8 @@ module PopOpen =
         rect.Height <- rect.Bottom - rect.Top
 
         InteropNative.SetWindowPos (handle, HWND_TOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW) |> ignore
+        Thread.Sleep 300
+        InteropNative.SetWindowPos (handle, HWND_TOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW) |> ignore
         InteropNative.SetWindowPos (handle, HWND_NOTOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW) |> ignore
         ()
 
@@ -78,13 +80,10 @@ module PopOpen =
             Thread.Sleep 500
 
             let newHandle = selectHandle findLockHandle findProcessHandle input log
+            if (oldHandle <> newHandle) then BringToFront newHandle log
             log ("Old: " + oldHandle.ToString() + " New: " + newHandle.ToString())
 
-            if (oldHandle <> newHandle) then BringToFront newHandle log
-            Thread.Sleep 1000
-            if (oldHandle <> newHandle) then BringToFront newHandle log
-            
-            if currentTime > timeToStop
+            if currentTime > timeToStop 
             then newHandle
             else popUpLoop newHandle DateTime.UtcNow
 

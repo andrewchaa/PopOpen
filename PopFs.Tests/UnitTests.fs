@@ -14,7 +14,7 @@ type ``Given OpenInternal`` ()=
     let FakeFindProcHandle _ = nativeint 0
     let FakeFindLockHandle _ = nativeint 0
     let Log (f: string) = Console.WriteLine f  
-    let SelectHandle i j (k: Input) Log  = 
+    let SelectHandle i j (k: Input) log  = 
         let r1 = i k
         let r2 = j k
         match r1 with
