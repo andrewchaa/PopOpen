@@ -40,8 +40,8 @@ module PopOpen =
                      | p :: _ -> Success p.MainWindowHandle
 
 
-    let internal SelectHandle getProcHandle findLockHandle (input: Input) log = 
-        let procHandle = getProcHandle input
+    let SelectHandle findProcHandle findLockHandle (input: Input) log = 
+        let procHandle = findProcHandle input
         let lockHandle = findLockHandle input
         
         log (String.Format("Lock Handle: {0}, Proc Handle: {1}", lockHandle, procHandle))
