@@ -49,15 +49,15 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="UnitTests.fs" />
+    <Compile Include="OpenInternalTests.fs" />
     <Compile Include="IntegrationTests.fs" />
     <Compile Include="InUseDetectorTests.fs" />
+    <None Include="Word 2.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="app.config" />
     <None Include="Powerpoint 2.pptx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Word.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Excel 1.xlsx">
@@ -74,6 +74,12 @@
     </Content>
     <None Include="Sandbox.fsx" />
     <None Include="Picture.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Word 1.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Pdf 1.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

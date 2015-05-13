@@ -15,15 +15,29 @@ module PopOpen =
     
     type Input = { File: string; Prc: Process }
 
+    let Log s = Debug.WriteLine(s)
+
     let internal Start (file: string) = 
         {
             File = file;
             Prc = file |> Process.Start
         }
 
+    let internal CheckTitle (input: Input) (windowTitle: string) =
+        let fileName = (Path.GetFileName input.File).ToLowerInvariant()
+        Log ("Filename: " + fileName)
+        windowTitle.ToLowerInvariant().Contains fileName
+
     let internal FindProcessHandle (input : Input) =
         try
-            Success input.Prc.MainWindowHandle
+            Log(String.Format("FindProcessHandle: ProcessId - {0}, Handle - {1}, Title - {2}", input.Prc.Id, input.Prc.MainWindowHandle, input.Prc.MainWindowTitle))
+
+            if CheckTitle input input.Prc.MainWindowTitle
+            then Log "Found"
+                 Success input.Prc.MainWindowHandle
+            else Log "File not loaded yet"
+                 Failure "FileNotLoadedYet"
+
         with
             | :? System.InvalidOperationException -> Failure "InvalidOperationException"
             | :? System.NullReferenceException -> Failure "NullReferenceException"
@@ -36,24 +50,17 @@ module PopOpen =
         |> InUseDetection.GetProcessesUsingFiles
         |> List.ofSeq<Process>
         |> fun ps -> match ps with
-                     | [] -> Failure "Can't find the process"
-                     | p :: _ -> Success p.MainWindowHandle
+                     | [] ->    Log "Can't find the locking process"
+                                Failure "Can't find the process"
+                     
+                     | p::_ ->  Log(String.Format("FindLockHandle: ProcessId - {0}, Handle - {1}, Title - {2}", p.Id, p.MainWindowHandle, p.MainWindowTitle))
+                                if CheckTitle input p.MainWindowTitle
+                                then Log "Found"
+                                     Success p.MainWindowHandle
+                                else Log "File not loaded yet" 
+                                     Failure "FileNotLoadedYet"
 
-
-    let SelectHandle findProcHandle findLockHandle (input: Input) log = 
-        let procHandle = findProcHandle input
-        let lockHandle = findLockHandle input
-        
-        log (String.Format("Lock Handle: {0}, Proc Handle: {1}", lockHandle, procHandle))
-
-        match lockHandle with
-        | Success h -> h
-        | Failure s -> match procHandle with
-                       | Success h -> h
-                       | Failure s -> 0n
-
-
-    let BringToFront handle log =
+    let BringToFront handle =
         let HWND_TOPMOST = new IntPtr -1
         let HWND_NOTOPMOST = new IntPtr -2;
         let SWP_SHOWWINDOW = 0x0040u
@@ -61,7 +68,7 @@ module PopOpen =
         let mutable rect = new InteropNative.RECT()
         let result = InteropNative.GetWindowRect(handle, &rect)
 
-        log (String.Format("Popping up {0}, Rect: {1} {2} {3} {4}", handle, rect.Top, rect.Left, rect.Right, rect.Bottom))
+        Log (String.Format("Popping up {0}, Rect: {1} {2} {3} {4}", handle, rect.Top, rect.Left, rect.Right, rect.Bottom))
         
         rect.Width <- rect.Right - rect.Left
         rect.Height <- rect.Bottom - rect.Top
@@ -70,48 +77,47 @@ module PopOpen =
         Thread.Sleep 300
         InteropNative.SetWindowPos (handle, HWND_TOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW) |> ignore
         InteropNative.SetWindowPos (handle, HWND_NOTOPMOST, rect.Left, rect.Top, rect.Width, rect.Height, SWP_SHOWWINDOW) |> ignore
-        ()
+        
+        handle
 
-
-    let PopUp findLockHandle findProcessHandle selectHandle (waitTime: float) log (input: Input) =
+    let internal FindHandle findLockHandle findProcessHandle (waitTime: float) (input: Input) =
         let timeToStop = DateTime.UtcNow.AddSeconds(waitTime)
 
-        let rec popUpLoop oldHandle currentTime =
-            Thread.Sleep 500
-
-            let newHandle = selectHandle findLockHandle findProcessHandle input log
-            if (oldHandle <> newHandle) then BringToFront newHandle log
-            log ("Old: " + oldHandle.ToString() + " New: " + newHandle.ToString())
-
-            if currentTime > timeToStop 
-            then newHandle
-            else popUpLoop newHandle DateTime.UtcNow
-
-        popUpLoop (nativeint 0) DateTime.UtcNow            
+        let rec loop handle =
+            Thread.Sleep 200
             
+            let handle =
+                match findProcessHandle input with
+                | Success h -> h
+                | Failure f -> match findLockHandle input with
+                               | Success h -> h
+                               | Failure f -> 0n
 
-    let OpenInternal start (waitTime: int) findLockHandle findProcessHandle selectHandle log file = 
+            if handle <> 0n || DateTime.UtcNow > timeToStop
+            then handle
+            else loop handle
+            
+        loop 0n
 
+    let OpenInternal start (waitTime: int) findLockHandle findProcessHandle file = 
         file 
         |> start 
-        |> PopUp findLockHandle findProcessHandle selectHandle (float waitTime) log
-
+        |> FindHandle findLockHandle findProcessHandle (float waitTime)
+        |> BringToFront
 
     let WaitSeconds = 30
 
     let Open (file: string) = 
-        OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file 
+        OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle file 
 
     let OpenW (file: string, waitSeconds) = 
-        OpenInternal Start waitSeconds FindLockHandle FindProcessHandle SelectHandle (fun f -> Debug.WriteLine f) file
+        OpenInternal Start waitSeconds FindLockHandle FindProcessHandle file
 
-    let logToFile (l: string) =
+    let logToFile (log: string) =
         let path = Path.Combine(Path.GetTempPath(), "pop.log")
         
         use writer = new StreamWriter(path, true)
-        l |> writer.WriteLine |> ignore
-
-        ()
+        DateTime.UtcNow.ToString("YYYY-MM-DD hh:mmm:ss") + log |> writer.WriteLine |> ignore
 
     let OpenD (file: string) = 
-        OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle SelectHandle (fun f ->  logToFile f) file
+        OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle file
