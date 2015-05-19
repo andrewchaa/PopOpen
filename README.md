@@ -14,6 +14,14 @@ Open a document in the foreground
 PM> Install-Package PopOpen
 ```
 
+### logging
+
+You can pass your logger method as lambda function for debugging purpose. The following examples passes log4net's Debug.
+
+```
+PopOpen.OpenD(path, s => _log.Debug(s));
+```
+
 Visit https://www.nuget.org/packages/PopOpen/ for more package details
 
 ### Technical details.
