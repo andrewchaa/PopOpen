@@ -25,7 +25,7 @@ module PopOpen =
         }
 
     let internal CheckTitle (input: Input) (windowTitle: string) =
-        let fileName = (Path.GetFileName input.File).ToLowerInvariant()
+        let fileName = (Path.GetFileNameWithoutExtension input.File).ToLowerInvariant()
         Log ("Filename: " + fileName)
         windowTitle.ToLowerInvariant().Contains fileName
 
@@ -120,6 +120,6 @@ module PopOpen =
         use writer = new StreamWriter(path, true)
         DateTime.UtcNow.ToString("YYYY-MM-DD hh:mmm:ss") + log |> writer.WriteLine |> ignore
 
-    let OpenD ((file: string), logFn) = 
-        Log <- fun s -> logFn s
+    let OpenD ((file: string), (logFn: Action<string>)) = 
+        Log <- fun s ->  logFn.Invoke(s)
         OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle file

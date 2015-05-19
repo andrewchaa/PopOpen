@@ -24,7 +24,7 @@ type ``PopOpen Integration tests`` ()=
 
     [<Test>] member t.
         ``It should add passed down logger for debugging purpose`` ()= 
-            PopOpen.OpenD (Path.Combine(dir, "Word 1.docx"), Debug.WriteLine) |> should not' (equal 0)
+            PopOpen.OpenD (Path.Combine(dir, "Word 1.docx"), Action<string> (fun s -> Debug.WriteLine s)) |> should not' (equal 0)
 
     [<Test>] member t.
         ``When it opens the first excel file`` ()=
