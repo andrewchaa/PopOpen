@@ -4,10 +4,11 @@ open NUnit.Framework
 open FsUnit
 open Pop
 open System
+open System.Diagnostics
 open System.IO
 
 [<TestFixture>]
-type ``Given PopOpener`` ()=
+type ``PopOpen Integration tests`` ()=
     
     let dir = Environment.CurrentDirectory
 
@@ -17,13 +18,13 @@ type ``Given PopOpener`` ()=
 
     [<Test>] member t.
         ``It should open two word files in sequence successfully`` ()=
-            PopOpen.OpenW ((Path.Combine(dir, "Word 1.docx")), 10) |> should not' (equal 0);
-            PopOpen.OpenW ((Path.Combine(dir, "Word 2.docx")), 10) |> should not' (equal 0)
+            PopOpen.OpenW ((Path.Combine(dir, "Word 1.docx")), 30) |> should not' (equal 0);
+            PopOpen.OpenW ((Path.Combine(dir, "Word 2.docx")), 30) |> should not' (equal 0)
              
 
     [<Test>] member t.
-        ``When it opens a word file in a debug mode`` ()= 
-            PopOpen.OpenD (Path.Combine(dir, "Word 1.docx")) |> should not' (equal 0)
+        ``It should add passed down logger for debugging purpose`` ()= 
+            PopOpen.OpenD (Path.Combine(dir, "Word 1.docx"), Debug.WriteLine) |> should not' (equal 0)
 
     [<Test>] member t.
         ``When it opens the first excel file`` ()=

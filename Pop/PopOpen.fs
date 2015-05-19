@@ -15,7 +15,8 @@ module PopOpen =
     
     type Input = { File: string; Prc: Process }
 
-    let Log s = Debug.WriteLine(s)
+    let mutable Log = fun s -> printfn "%s" s
+        
 
     let internal Start (file: string) = 
         {
@@ -119,5 +120,6 @@ module PopOpen =
         use writer = new StreamWriter(path, true)
         DateTime.UtcNow.ToString("YYYY-MM-DD hh:mmm:ss") + log |> writer.WriteLine |> ignore
 
-    let OpenD (file: string) = 
+    let OpenD ((file: string), logFn) = 
+        Log <- fun s -> logFn s
         OpenInternal Start WaitSeconds FindLockHandle FindProcessHandle file
